@@ -1,6 +1,6 @@
 = digraph
 
-This is An implementation of {http://en.wikipedia.org/wiki/Directed_graph weighted directed graph} data structure written in Object-C. It uses {http://en.wikipedia.org/wiki/Dijkstra%27s_algorithm Dijkstra's algorithm} to find the shortest path between a source node and target node.
+This is An implementation of {weighted directed graph}[http://en.wikipedia.org/wiki/Directed_graph] data structure written in Object-C. It uses {Dijkstra's algorithm}[http://en.wikipedia.org/wiki/Dijkstra%27s_algorithm] to find the shortest path between a source node and target node.
 
 
 == Note
