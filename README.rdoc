@@ -1,0 +1,70 @@
+= digraph
+
+This is An implementation of {http://en.wikipedia.org/wiki/Directed_graph weighted directed graph} data structure written in Object-C. It uses {http://en.wikipedia.org/wiki/Dijkstra%27s_algorithm Dijkstra's algorithm} to find the shortest path between a source node and target node.
+
+
+== Note
+
+The code is pretty well tested. Currently all tests pass, but it is not yet battle tested, and it is probably not perfect.
+
+I don't know how good the performance for this is, but you should know that I didn't spend anytime on performance.
+
+You should probably use this library as a starting point for your own graph data structure, and tweak / fix as you like.
+
+== Usage
+
+Here is a quick example on how to use this lib.
+
+    #import "Graph.h"
+
+    int main(){
+        Graph* graph;
+        GraphNode *ns, *nt, *n1, *n2, *n3;
+        GraphEdge *nsn1, *nsn2, *nsn3, *n1nt, *n2nt, *n3nt;
+
+        // create the graph
+        graph = [Graph graph];
+    
+        // add some nodes
+        ns = [GraphNode nodeWithValue:@"ns"];
+        nt = [GraphNode nodeWithValue:@"nt"];
+        n1 = [GraphNode nodeWithValue:@"n1"];
+        n2 = [GraphNode nodeWithValue:@"n2"];
+        n3 = [GraphNode nodeWithValue:@"n3"];
+    
+        // add some edges
+        nsn1 = [graph addEdgeFromNode:ns toNode:n1 withWeight:7.0f];
+        nsn2 = [graph addEdgeFromNode:ns toNode:n2 withWeight:9.0f];
+        nsn3 = [graph addEdgeFromNode:ns toNode:n3 withWeight:14.0f];
+        n1nt = [graph addEdgeFromNode:n1 toNode:nt withWeight:10.0f];
+        n2nt = [graph addEdgeFromNode:n2 toNode:nt withWeight:9.0f];
+        n3nt = [graph addEdgeFromNode:n3 toNode:nt withWeight:1.0f];
+    
+        // The graph now look like this:
+        //
+        //      /------7------> n1 ------10-----\
+        //      |                               |
+        //      |                               |
+        //      |                               |
+        // ns --|------9------> n2 ------9------|--------> nt
+        //      |                               |
+        //      |                               |
+        //      |                               |
+        //      \------14-----> n3 ------1------/
+        //
+    
+        // find the shortest path from ns to nt
+        NSArray* path = [graph shortestPath:ns to:nt];
+        // The result should be:
+        //  [n3, nt]
+    
+        return 0;
+    }
+
+
+
+== Copyright
+
+Copyright (c) 2011 Aaron Qian. See LICENSE.txt for
+further details.
+
