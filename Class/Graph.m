@@ -10,8 +10,6 @@
 
 
 @interface GraphNode()
-@property (nonatomic, readwrite, retain) NSSet *edgesIn;
-@property (nonatomic, readwrite, retain) NSSet *edgesOut;
 @property (nonatomic, readwrite, retain) id    value;
 - (GraphEdge*)linkToNode:(GraphNode*)node;
 - (GraphEdge*)linkToNode:(GraphNode*)node weight:(float)weight;
