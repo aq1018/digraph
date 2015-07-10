@@ -13,8 +13,10 @@
 @property (nonatomic, readwrite, retain) id    value;
 - (GraphEdge*)linkToNode:(GraphNode*)node;
 - (GraphEdge*)linkToNode:(GraphNode*)node weight:(float)weight;
+- (GraphEdge*)linkToNode:(GraphNode*)node withOptions:(NSDictionary*)options;
 - (GraphEdge*)linkFromNode:(GraphNode*)node;
 - (GraphEdge*)linkFromNode:(GraphNode*)node weight:(float)weight;
+- (GraphEdge*)linkFromNode:(GraphNode*)node withOptions:(NSDictionary*)options;
 - (void)unlinkToNode:(GraphNode*)node;
 - (void)unlinkFromNode:(GraphNode*)node;
 @end
@@ -41,8 +43,7 @@
 
 - (void)dealloc
 {
-    [nodes_ release];
-    [super dealloc];
+
 }
 
 // Using Dijkstra's algorithm to find shortest path
@@ -55,7 +56,7 @@
     NSUInteger size = [nodes_ count];
     NSMutableDictionary* dist = [NSMutableDictionary dictionaryWithCapacity:size];
     NSMutableDictionary* prev = [NSMutableDictionary dictionaryWithCapacity:size];
-    NSMutableSet* remaining = [[nodes_ mutableCopy] autorelease];
+    NSMutableSet* remaining = [nodes_ mutableCopy];
     
     for(GraphNode* node in [nodes_ objectEnumerator])
         [dist setObject:[NSNumber numberWithFloat:INFINITY] forKey:node];
@@ -153,6 +154,12 @@
     return [fromNode linkToNode:toNode weight:weight];    
 }
 
+- (GraphEdge*)addEdgeFromNode:(GraphNode*)fromNode toNode:(GraphNode*)toNode withOptions:(NSDictionary*)options {
+    fromNode = [self addNode:fromNode];
+    toNode   = [self addNode:toNode];
+    return [fromNode linkToNode:toNode withOptions: options];
+}
+
 - (void)removeNode:(GraphNode*)node {
     [nodes_ removeObject:node];
 }
@@ -162,7 +169,7 @@
 }
 
 + (Graph*)graph {
-    return [[[self alloc] init] autorelease];
+    return [[self alloc] init];
 }
 
 @end

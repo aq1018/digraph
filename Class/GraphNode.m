@@ -15,8 +15,10 @@
 @property (nonatomic, readwrite, retain) id    value;
 - (GraphEdge*)linkToNode:(GraphNode*)node;
 - (GraphEdge*)linkToNode:(GraphNode*)node weight:(float)weight;
+- (GraphEdge*)linkToNode:(GraphNode*)node withOptions:(NSDictionary*)options;
 - (GraphEdge*)linkFromNode:(GraphNode*)node;
 - (GraphEdge*)linkFromNode:(GraphNode*)node weight:(float)weight;
+- (GraphEdge*)linkFromNode:(GraphNode*)node withOptions:(NSDictionary*)options;
 - (void)unlinkToNode:(GraphNode*)node;
 - (void)unlinkFromNode:(GraphNode*)node;
 @end
@@ -32,6 +34,7 @@
 		self.value = nil;
 		self.edgesIn  = [NSMutableSet set];
         self.edgesOut = [NSMutableSet set];
+        self.options = nil;
 	}
     return self; 
 }
@@ -41,8 +44,28 @@
 		self.value = value;
         self.edgesIn  = [NSMutableSet set];
         self.edgesOut = [NSMutableSet set];
+        self.options = nil;
 	}
     return self; 
+}
+-(id)initWithOptions:(NSDictionary*)options{
+    if( (self=[super init]) ) {
+        self.value = nil;
+        self.edgesIn  = [NSMutableSet set];
+        self.edgesOut = [NSMutableSet set];
+        self.options = options;
+    }
+    return self;
+}
+
+-(id)initWithOptions:(NSDictionary*)options andValue:(id)value{
+    if( (self=[super init]) ) {
+        self.value = value;
+        self.edgesIn  = [NSMutableSet set];
+        self.edgesOut = [NSMutableSet set];
+        self.options = options;
+    }
+    return self;
 }
 
 - (void)dealloc
@@ -55,11 +78,6 @@
     for (GraphNode* fromNode in [[self inNodes] objectEnumerator]) {
         [fromNode->edgesOut_ minusSet:edgesIn_];
     }
-    
-	[value_ release];
-    [edgesIn_ release];
-    [edgesOut_ release];
-	[super dealloc];
 }
 
 - (BOOL)isEqual:(id)other {
@@ -73,7 +91,7 @@
 - (BOOL)isEqualToGraphNode:(GraphNode*)other {
     if (self == other)
         return YES;
-    return [[self value] isEqual: [other value]];
+    return (([[self value] isEqual: [other value]] || ([self value] == nil && [other value] == nil)) && [self.options isEqualToDictionary: other.options]);
 }
 
 - (NSUInteger)hash
@@ -98,6 +116,12 @@
     [node->edgesIn_     addObject:edge];
     return edge;
 }
+- (GraphEdge*)linkToNode:(GraphNode*)node withOptions:(NSDictionary*)options {
+    GraphEdge* edge = [GraphEdge edgeWithFromNode:self toNode:node withOptions:options];
+    [edgesOut_          addObject:edge];
+    [node->edgesIn_     addObject:edge];
+    return edge;
+}
 
 - (GraphEdge*)linkFromNode:(GraphNode*)node {
     GraphEdge* edge = [GraphEdge edgeWithFromNode:node toNode:self];
@@ -108,6 +132,12 @@
 
 - (GraphEdge*)linkFromNode:(GraphNode*)node weight:(float)weight {
     GraphEdge* edge = [GraphEdge edgeWithFromNode:node toNode:self weight:weight];
+    [edgesIn_           addObject:edge];
+    [node->edgesOut_    addObject:edge];
+    return edge;
+}
+- (GraphEdge*)linkFromNode:(GraphNode*)node withOptions:(NSDictionary*)options {
+    GraphEdge* edge = [GraphEdge edgeWithFromNode:node toNode:self withOptions:options];
     [edgesIn_           addObject:edge];
     [node->edgesOut_    addObject:edge];
     return edge;
@@ -178,11 +208,18 @@
 }
 
 + (id)node {
-    return [[[GraphNode alloc] init] autorelease];
+    return [[GraphNode alloc] init];
 }
 
 + (id)nodeWithValue:(id)value {
-    return [[[GraphNode alloc] initWithValue:value] autorelease];
+    return [[GraphNode alloc] initWithValue:value];
+}
++ (id)nodeWithOptions:(NSDictionary*)options{
+    return [[GraphNode alloc] initWithOptions: options];
+}
+
++ (id)nodeWithOptions:(NSDictionary*)options andValue:(id)value{
+    return [[GraphNode alloc] initWithOptions: options andValue:value];
 }
 
 @end

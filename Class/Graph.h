@@ -20,6 +20,7 @@
 - (GraphNode*)addNode:(GraphNode*)node;
 - (GraphEdge*)addEdgeFromNode:(GraphNode*)fromNode toNode:(GraphNode*)toNode;
 - (GraphEdge*)addEdgeFromNode:(GraphNode*)fromNode toNode:(GraphNode*)toNode withWeight:(float)weight;
+- (GraphEdge*)addEdgeFromNode:(GraphNode*)fromNode toNode:(GraphNode*)toNode withOptions:(NSDictionary*)options;
 - (void)removeNode:(GraphNode*)node;
 - (void)removeEdge:(GraphEdge*)edge;
 - (BOOL)hasNode:(GraphNode*)node;
