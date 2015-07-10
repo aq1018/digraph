@@ -15,6 +15,7 @@
 @interface GraphEdge()
 @property (nonatomic, readwrite, retain)  GraphNode *fromNode;
 @property (nonatomic, readwrite, retain)  GraphNode *toNode;
+@property (nonatomic, readwrite, retain)  NSDictionary *options;
 @end
 
 @implementation GraphEdge
@@ -29,6 +30,7 @@
         self.fromNode = nil;
         self.toNode = nil;
         self.weight = 0;
+        self.options = nil;
     }
     
     return self;
@@ -39,6 +41,7 @@
         self.fromNode = fromNode;
         self.toNode = toNode;
         self.weight = 0;
+        self.options = nil;
     }
     
     return self;
@@ -49,6 +52,18 @@
         self.fromNode = fromNode;
         self.toNode = toNode;
         self.weight = weight;
+        self.options = nil;
+    }
+    
+    return self;
+}
+
+- (id)initWithFromNode:(GraphNode*)fromNode toNode:(GraphNode*)toNode withOptions:(NSDictionary*)options {
+    if( (self = [super init]) ) {
+        self.fromNode = fromNode;
+        self.toNode = toNode;
+        self.weight = 0;
+        self.options = options;
     }
     
     return self;
@@ -56,9 +71,7 @@
 
 -(void) dealloc
 {
-	[fromNode_ release];
-    [toNode_ release];
-	[super dealloc];
+    
 }
 
 - (BOOL)isEqual:(id)other {
@@ -86,15 +99,18 @@
 }
 
 + (id)edge {
-    return [[[self alloc] init] autorelease];
+    return [[self alloc] init];
 }
 
 + (id)edgeWithFromNode:(GraphNode*)fromNode toNode:(GraphNode*)toNode {
-    return [[[self alloc] initWithFromNode:fromNode toNode:toNode] autorelease];  
+    return [[self alloc] initWithFromNode:fromNode toNode:toNode];
 }
 
 + (id)edgeWithFromNode:(GraphNode*)fromNode toNode:(GraphNode*)toNode weight:(float)weight {
-    return [[[self alloc] initWithFromNode:fromNode toNode:toNode weight:weight] autorelease];  
+    return [[self alloc] initWithFromNode:fromNode toNode:toNode weight:weight];
+}
++ (id)edgeWithFromNode:(GraphNode*)fromNode toNode:(GraphNode*)toNode withOptions:(NSDictionary*)options {
+    return [[self alloc] initWithFromNode:fromNode toNode:toNode withOptions:options];
 }
 
 @end

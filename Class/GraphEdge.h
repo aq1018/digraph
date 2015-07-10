@@ -18,15 +18,18 @@
 
 @property (nonatomic, readonly, retain)  GraphNode *fromNode;
 @property (nonatomic, readonly, retain)  GraphNode *toNode;
+@property (nonatomic, readonly, retain)  NSDictionary *options;
 @property (nonatomic, readwrite, assign) float     weight;
 
 - (id)init;
 - (id)initWithFromNode:(GraphNode*)fromNode toNode:(GraphNode*)toNode;
 - (id)initWithFromNode:(GraphNode*)fromNode toNode:(GraphNode*)toNode weight:(float)weight;
+- (id)initWithFromNode:(GraphNode*)fromNode toNode:(GraphNode*)toNode withOptions:(NSDictionary*)options;
 - (BOOL)isEqualToGraphEdge:(GraphEdge*)other;
 
 + (id)edge;
 + (id)edgeWithFromNode:(GraphNode*)fromNode toNode:(GraphNode*)toNode;
 + (id)edgeWithFromNode:(GraphNode*)fromNode toNode:(GraphNode*)toNode weight:(float)weight;
++ (id)edgeWithFromNode:(GraphNode*)fromNode toNode:(GraphNode*)toNode withOptions:(NSDictionary*)options;
 
 @end
